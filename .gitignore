@@ -1,0 +1,15 @@
+__pycache__
+build
+dist
+*.egg-info
+*pyc
+*.log
+*.substvars
+*.debhelper
+*.pybuild
+debian/files
+debian/python3-maasclient/
+debian/maasclient/
+*.swp
+# the dependencies deb
+*.deb

@@ -18,24 +18,25 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import unittest
-import os
 import sys
 import uuid
+import requests
 sys.path.insert(0, '../maasclient')
 
 from maasclient import MaasClient
 from maasclient.auth import MaasAuth
 
-ROOT_USER = os.environ['CI_USER'] if 'CI_USER' in os.environ else 'admin'
 AUTH = MaasAuth()
+AUTH.api_key = 'FUVLUr44JARNCNMFsP:rdpdeVscAqvZhnm4Te:EpDGJacNqy5Xzj22Xd58Xv5vz8MqEQNA'
+AUTH.api_url = 'http://10.0.3.55/MAAS/api/1.0'
 
-MAAS_INSTALLED = os.path.exists('/etc/maas')
+_check_maas = requests.get(AUTH.api_url)
+MAAS_INSTALLED = _check_maas.ok
 
 
 @unittest.skipIf(not MAAS_INSTALLED, "Maas is not installed")
 class MaasAuthTest(unittest.TestCase):
     def test_get_api_key(self):
-        AUTH.get_api_key(ROOT_USER)
         self.assertEquals(3, len(AUTH.api_key.split(':')))
 
 
@@ -43,7 +44,7 @@ class MaasAuthTest(unittest.TestCase):
 class MaasClientTest(unittest.TestCase):
     def setUp(self):
         self.c = MaasClient(AUTH)
-        self.tag = 'a-test-tag-' + uuid.uuid1()
+        self.tag = 'a-test-tag-' + str(uuid.uuid1())
         res = self.c.tag_new(self.tag)
         self.assertTrue(res)
 
@@ -59,7 +60,7 @@ class MaasClientTest(unittest.TestCase):
 class MaasClientZoneTest(unittest.TestCase):
     def setUp(self):
         self.c = MaasClient(AUTH)
-        self.zone_name = 'testzone-' + uuid.uuid1()
+        self.zone_name = 'testzone-' + str(uuid.uuid1())
         res = self.c.zone_new(self.zone_name,
                               'zone created in unittest')
         self.assertTrue(res)
