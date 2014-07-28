@@ -16,7 +16,6 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from cloudinstall.maas import MaasState
 from requests_oauthlib import OAuth1
 import requests
 import json
@@ -308,7 +307,7 @@ class MaasClient:
         FPI_TAG = 'use-fastpath-installer'
         self.tag_new(FPI_TAG)
         for machine in maas:
-            if machine['status'] == MaasState.DECLARED:
+            if machine['status'] == 0:
                 self.tag_machine(FPI_TAG, machine['system_id'])
 
     ###########################################################################
