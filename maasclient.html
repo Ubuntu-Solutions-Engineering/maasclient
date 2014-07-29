@@ -1,107 +1,141 @@
-
-
 <!DOCTYPE html>
-<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
-  <title>API &mdash; MAAS Api client 0.1 documentation</title>
-  
 
-  
-  
 
-  
-  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
-
-  
-  
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-
-  
-
-  
-  
-    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  
-
-  
-    <link rel="top" title="MAAS Api client 0.1 documentation" href="#"/> 
-
-  
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
-
-</head>
-
-<body class="wy-body-for-nav" role="document">
-
-  <div class="wy-grid-for-nav">
-
+    <title>maasclient — API &mdash; MAAS Api client 0.1 documentation</title>
     
-    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
-      <div class="wy-side-nav-search">
-        <a href="#" class="fa fa-home"> MAAS Api client</a>
-        <div role="search">
-  <form id ="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
-    <input type="hidden" name="check_keywords" value="yes" />
-    <input type="hidden" name="area" value="default" />
-  </form>
-</div>
+    <link rel="stylesheet" href="_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/bootswatch-3.1.0/united/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="_static/bootstrap-sphinx.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="_static/bootstrap-3.1.0/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="_static/bootstrap-sphinx.js"></script>
+    <link rel="top" title="MAAS Api client 0.1 documentation" href="index.html" />
+    <link rel="prev" title="Welcome to MAAS Api client’s documentation!" href="index.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+  </head>
+  <body>
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="index.html">
+          MAASClient</a>
+        <span class="navbar-text navbar-version pull-left"><b>0.1</b></span>
       </div>
 
-      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-        
-        
-            <!-- Local TOC -->
-            <div class="local-toc"><ul>
-<li><a class="reference internal" href="#">API</a></li>
-</ul>
-</div>
-        
-      </div>
-      &nbsp;
-    </nav>
-
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
-        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-        <a href="#">MAAS Api client</a>
-      </nav>
-
-
-      
-      <div class="wy-nav-content">
-        <div class="rst-content">
-          <div role="navigation" aria-label="breadcrumbs navigation">
-  <ul class="wy-breadcrumbs">
-    <li><a href="#">Docs</a> &raquo;</li>
-      
-    <li>API</li>
-      <li class="wy-breadcrumbs-aside">
-        
-          <a href="_sources/index.txt" rel="nofollow"> View page source</a>
-        
-      </li>
-  </ul>
-  <hr/>
-</div>
-          <div role="main">
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            <li class="divider-vertical"></li>
             
-  <div class="section" id="api">
-<h1>API<a class="headerlink" href="#api" title="Permalink to this headline">¶</a></h1>
+                <li><a href="http://maas.ubuntu.com">MAAS</a></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="index.html">MAASClient <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href=""><tt class="docutils literal"><span class="pre">maasclient</span></tt> &#8212; API</a></li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li><a class="reference internal" href="#"><tt class="docutils literal"><span class="pre">maasclient</span></tt> &#8212; API</a></li>
+</ul>
+</ul>
+</li>
+              
+            
+            
+              
+                
+  <li>
+    <a href="index.html" title="Previous Chapter: Welcome to MAAS Api client’s documentation!"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm">&laquo; Welcome to MAAS ...</span>
+    </a>
+  </li>
+              
+            
+            
+            
+            
+              <li class="hidden-sm">
+<div id="sourcelink">
+  <a href="_sources/maasclient.txt"
+     rel="nofollow">Source</a>
+</div></li>
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      
+  <div class="section" id="maasclient-api">
+<h1><tt class="docutils literal"><span class="pre">maasclient</span></tt> &#8212; API<a class="headerlink" href="#maasclient-api" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt>
-<em class="property">class </em><tt class="descclassname">maasclient.</tt><tt class="descname">MaasClient</tt><big>(</big><em>auth</em><big>)</big><a class="reference internal" href="_modules/maasclient.html#MaasClient"><span class="viewcode-link">[source]</span></a></dt>
+<em class="property">class </em><tt class="descclassname">maasclient.</tt><tt class="descname">MaasClient</tt><big>(</big><em>auth</em><big>)</big></dt>
 <dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">builtins.object</span></tt></p>
 <p>Client Class</p>
 <dl class="method">
 <dt>
-<tt class="descname">boot_images</tt><big>(</big><em>uuid</em><big>)</big><a class="reference internal" href="_modules/maasclient.html#MaasClient.boot_images"><span class="viewcode-link">[source]</span></a></dt>
+<tt class="descname">boot_images</tt><big>(</big><em>uuid</em><big>)</big></dt>
 <dd><p>Query boot images list</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -119,7 +153,7 @@
 
 <dl class="method">
 <dt>
-<tt class="descname">delete</tt><big>(</big><em>url</em>, <em>params=None</em><big>)</big><a class="reference internal" href="_modules/maasclient.html#MaasClient.delete"><span class="viewcode-link">[source]</span></a></dt>
+<tt class="descname">delete</tt><big>(</big><em>url</em>, <em>params=None</em><big>)</big></dt>
 <dd><p>Performs a authenticated DELETE against a MAAS endpoint</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -137,7 +171,7 @@
 
 <dl class="method">
 <dt>
-<tt class="descname">get</tt><big>(</big><em>url</em>, <em>params=None</em><big>)</big><a class="reference internal" href="_modules/maasclient.html#MaasClient.get"><span class="viewcode-link">[source]</span></a></dt>
+<tt class="descname">get</tt><big>(</big><em>url</em>, <em>params=None</em><big>)</big></dt>
 <dd><p>Performs a authenticated GET against a MAAS endpoint</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -155,7 +189,7 @@
 
 <dl class="method">
 <dt>
-<tt class="descname">import_boot_images</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/maasclient.html#MaasClient.import_boot_images"><span class="viewcode-link">[source]</span></a></dt>
+<tt class="descname">import_boot_images</tt><big>(</big><big>)</big></dt>
 <dd><p>Import boot images on all accepted controllers</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -171,7 +205,7 @@
 
 <dl class="method">
 <dt>
-<tt class="descname">node_commission</tt><big>(</big><em>system_id</em><big>)</big><a class="reference internal" href="_modules/maasclient.html#MaasClient.node_commission"><span class="viewcode-link">[source]</span></a></dt>
+<tt class="descname">node_commission</tt><big>(</big><em>system_id</em><big>)</big></dt>
 <dd><p>(Re)commission a node</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -187,7 +221,7 @@
 
 <dl class="method">
 <dt>
-<tt class="descname">node_remove</tt><big>(</big><em>system_id</em><big>)</big><a class="reference internal" href="_modules/maasclient.html#MaasClient.node_remove"><span class="viewcode-link">[source]</span></a></dt>
+<tt class="descname">node_remove</tt><big>(</big><em>system_id</em><big>)</big></dt>
 <dd><p>Delete a node</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -203,7 +237,7 @@
 
 <dl class="method">
 <dt>
-<tt class="descname">node_start</tt><big>(</big><em>system_id</em><big>)</big><a class="reference internal" href="_modules/maasclient.html#MaasClient.node_start"><span class="viewcode-link">[source]</span></a></dt>
+<tt class="descname">node_start</tt><big>(</big><em>system_id</em><big>)</big></dt>
 <dd><p>Power up a node</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -219,7 +253,7 @@
 
 <dl class="method">
 <dt>
-<tt class="descname">node_stop</tt><big>(</big><em>system_id</em><big>)</big><a class="reference internal" href="_modules/maasclient.html#MaasClient.node_stop"><span class="viewcode-link">[source]</span></a></dt>
+<tt class="descname">node_stop</tt><big>(</big><em>system_id</em><big>)</big></dt>
 <dd><p>Shutdown a node</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -235,7 +269,7 @@
 
 <dl class="attribute">
 <dt>
-<tt class="descname">nodegroups</tt><a class="reference internal" href="_modules/maasclient.html#MaasClient.nodegroups"><span class="viewcode-link">[source]</span></a></dt>
+<tt class="descname">nodegroups</tt></dt>
 <dd><p>List nodegroups</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -251,7 +285,7 @@
 
 <dl class="method">
 <dt>
-<tt class="descname">nodegroups_download_progress</tt><big>(</big><em>uuid</em><big>)</big><a class="reference internal" href="_modules/maasclient.html#MaasClient.nodegroups_download_progress"><span class="viewcode-link">[source]</span></a></dt>
+<tt class="descname">nodegroups_download_progress</tt><big>(</big><em>uuid</em><big>)</big></dt>
 <dd><p>Report download progress for a cluster controller</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -269,7 +303,7 @@
 
 <dl class="attribute">
 <dt>
-<tt class="descname">nodes</tt><a class="reference internal" href="_modules/maasclient.html#MaasClient.nodes"><span class="viewcode-link">[source]</span></a></dt>
+<tt class="descname">nodes</tt></dt>
 <dd><p>Nodes managed by MAAS</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -285,7 +319,7 @@
 
 <dl class="method">
 <dt>
-<tt class="descname">nodes_accept_all</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/maasclient.html#MaasClient.nodes_accept_all"><span class="viewcode-link">[source]</span></a></dt>
+<tt class="descname">nodes_accept_all</tt><big>(</big><big>)</big></dt>
 <dd><p>Accept all commissioned nodes</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -301,7 +335,7 @@
 
 <dl class="method">
 <dt>
-<tt class="descname">post</tt><big>(</big><em>url</em>, <em>params=None</em><big>)</big><a class="reference internal" href="_modules/maasclient.html#MaasClient.post"><span class="viewcode-link">[source]</span></a></dt>
+<tt class="descname">post</tt><big>(</big><em>url</em>, <em>params=None</em><big>)</big></dt>
 <dd><p>Performs a authenticated POST against a MAAS endpoint</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -319,7 +353,7 @@
 
 <dl class="method">
 <dt>
-<tt class="descname">report_boot_images</tt><big>(</big><em>uuid</em><big>)</big><a class="reference internal" href="_modules/maasclient.html#MaasClient.report_boot_images"><span class="viewcode-link">[source]</span></a></dt>
+<tt class="descname">report_boot_images</tt><big>(</big><em>uuid</em><big>)</big></dt>
 <dd><p>Describe imported images</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -337,7 +371,7 @@
 
 <dl class="method">
 <dt>
-<tt class="descname">tag_delete</tt><big>(</big><em>tag</em><big>)</big><a class="reference internal" href="_modules/maasclient.html#MaasClient.tag_delete"><span class="viewcode-link">[source]</span></a></dt>
+<tt class="descname">tag_delete</tt><big>(</big><em>tag</em><big>)</big></dt>
 <dd><p>Delete a tag</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -355,7 +389,7 @@
 
 <dl class="method">
 <dt>
-<tt class="descname">tag_fpi</tt><big>(</big><em>maas</em><big>)</big><a class="reference internal" href="_modules/maasclient.html#MaasClient.tag_fpi"><span class="viewcode-link">[source]</span></a></dt>
+<tt class="descname">tag_fpi</tt><big>(</big><em>maas</em><big>)</big></dt>
 <dd><p>Tag each DECLARED host with the FPI tag.</p>
 <p>Also a little strange: we could define a tag with
 &#8216;definition=true()&#8217; and automatically tag each node. However,
@@ -375,7 +409,7 @@ re-tagging things that have already been tagged).</p>
 
 <dl class="method">
 <dt>
-<tt class="descname">tag_machine</tt><big>(</big><em>tag</em>, <em>system_id</em><big>)</big><a class="reference internal" href="_modules/maasclient.html#MaasClient.tag_machine"><span class="viewcode-link">[source]</span></a></dt>
+<tt class="descname">tag_machine</tt><big>(</big><em>tag</em>, <em>system_id</em><big>)</big></dt>
 <dd><p>Tag the machine with the specified tag.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -399,7 +433,7 @@ re-tagging things that have already been tagged).</p>
 
 <dl class="method">
 <dt>
-<tt class="descname">tag_name</tt><big>(</big><em>maas</em><big>)</big><a class="reference internal" href="_modules/maasclient.html#MaasClient.tag_name"><span class="viewcode-link">[source]</span></a></dt>
+<tt class="descname">tag_name</tt><big>(</big><em>maas</em><big>)</big></dt>
 <dd><p>Tag each node as its hostname.</p>
 <p>This is a bit ugly. Since we want to be able to juju deploy to
 a particular node that the user has selected, we use juju&#8217;s
@@ -419,7 +453,7 @@ constraint to juju.</p>
 
 <dl class="method">
 <dt>
-<tt class="descname">tag_new</tt><big>(</big><em>tag</em><big>)</big><a class="reference internal" href="_modules/maasclient.html#MaasClient.tag_new"><span class="viewcode-link">[source]</span></a></dt>
+<tt class="descname">tag_new</tt><big>(</big><em>tag</em><big>)</big></dt>
 <dd><p>Create tag if it doesn&#8217;t exist.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -435,7 +469,7 @@ constraint to juju.</p>
 
 <dl class="attribute">
 <dt>
-<tt class="descname">tags</tt><a class="reference internal" href="_modules/maasclient.html#MaasClient.tags"><span class="viewcode-link">[source]</span></a></dt>
+<tt class="descname">tags</tt></dt>
 <dd><p>List tags known to MAAS</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -449,7 +483,7 @@ constraint to juju.</p>
 
 <dl class="attribute">
 <dt>
-<tt class="descname">users</tt><a class="reference internal" href="_modules/maasclient.html#MaasClient.users"><span class="viewcode-link">[source]</span></a></dt>
+<tt class="descname">users</tt></dt>
 <dd><p>List users on MAAS</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -463,7 +497,7 @@ constraint to juju.</p>
 
 <dl class="method">
 <dt>
-<tt class="descname">zone_delete</tt><big>(</big><em>name</em><big>)</big><a class="reference internal" href="_modules/maasclient.html#MaasClient.zone_delete"><span class="viewcode-link">[source]</span></a></dt>
+<tt class="descname">zone_delete</tt><big>(</big><em>name</em><big>)</big></dt>
 <dd><p>Delete a zone.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -471,15 +505,14 @@ constraint to juju.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>name</strong> &#8211; Name of the zone to be deleted</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True on success &amp; False on failure.</td>
-</tr>
 </tbody>
 </table>
+<p>:returns True on success &amp; False on failure.</p>
 </dd></dl>
 
 <dl class="method">
 <dt>
-<tt class="descname">zone_new</tt><big>(</big><em>name</em>, <em>description='Zone created by API'</em><big>)</big><a class="reference internal" href="_modules/maasclient.html#MaasClient.zone_new"><span class="viewcode-link">[source]</span></a></dt>
+<tt class="descname">zone_new</tt><big>(</big><em>name</em>, <em>description='Zone created by API'</em><big>)</big></dt>
 <dd><p>Create a physical zone</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -500,7 +533,7 @@ constraint to juju.</p>
 
 <dl class="attribute">
 <dt>
-<tt class="descname">zones</tt><a class="reference internal" href="_modules/maasclient.html#MaasClient.zones"><span class="viewcode-link">[source]</span></a></dt>
+<tt class="descname">zones</tt></dt>
 <dd><p>List physical zones</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -517,59 +550,21 @@ constraint to juju.</p>
 </div>
 
 
-          </div>
-          <footer>
-  
-
-  <hr/>
-
-  <div role="contentinfo">
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
     <p>
-        &copy; Copyright 2014, Ubuntu Solutions Engineering.
+        &copy; Copyright 2014, Ubuntu Solutions Engineering.<br/>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.2.<br/>
     </p>
   </div>
-
-  <a href="https://github.com/snide/sphinx_rtd_theme">Sphinx theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>
 </footer>
-        </div>
-      </div>
-
-    </section>
-
-  </div>
-  
-
-
-  
-
-    <script type="text/javascript">
-        var DOCUMENTATION_OPTIONS = {
-            URL_ROOT:'./',
-            VERSION:'0.1',
-            COLLAPSE_INDEX:false,
-            FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true
-        };
-    </script>
-      <script type="text/javascript" src="_static/jquery.js"></script>
-      <script type="text/javascript" src="_static/underscore.js"></script>
-      <script type="text/javascript" src="_static/doctools.js"></script>
-
-  
-
-  
-  
-    <script type="text/javascript" src="_static/js/theme.js"></script>
-  
-
-  
-  
-  <script type="text/javascript">
-      jQuery(function () {
-          SphinxRtdTheme.StickyNav.enable();
-      });
-  </script>
-   
-
-</body>
+  </body>
 </html>

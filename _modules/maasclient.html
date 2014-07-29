@@ -1,0 +1,512 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>maasclient &mdash; MAAS Api client 0.1 documentation</title>
+  
+
+  
+  
+
+  
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="top" title="MAAS Api client 0.1 documentation" href="../index.html"/>
+        <link rel="up" title="Module code" href="index.html"/> 
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-nav-search">
+        <a href="../index.html" class="fa fa-home"> MAAS Api client</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+        
+        
+            <!-- Local TOC -->
+            <div class="local-toc"></div>
+        
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../index.html">MAAS Api client</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="index.html">Module code</a> &raquo;</li>
+      
+    <li>maasclient</li>
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            
+  <h1>Source code for maasclient</h1><div class="highlight"><pre>
+<span class="c">#</span>
+<span class="c"># client.py - Client routines for MAAS API</span>
+<span class="c">#</span>
+<span class="c"># Copyright 2014 Canonical, Ltd.</span>
+<span class="c">#</span>
+<span class="c"># This program is free software: you can redistribute it and/or modify</span>
+<span class="c"># it under the terms of the GNU Affero General Public License as</span>
+<span class="c"># published by the Free Software Foundation, either version 3 of the</span>
+<span class="c"># License, or (at your option) any later version.</span>
+<span class="c">#</span>
+<span class="c"># This program is distributed in the hope that it will be useful,</span>
+<span class="c"># but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="c"># MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
+<span class="c"># GNU Affero General Public License for more details.</span>
+<span class="c">#</span>
+<span class="c"># You should have received a copy of the GNU Affero General Public License</span>
+<span class="c"># along with this program.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
+
+<span class="kn">from</span> <span class="nn">requests_oauthlib</span> <span class="kn">import</span> <span class="n">OAuth1</span>
+<span class="kn">import</span> <span class="nn">requests</span>
+<span class="kn">import</span> <span class="nn">json</span>
+
+
+<div class="viewcode-block" id="MaasClient"><a class="viewcode-back" href="../index.html#maasclient.MaasClient">[docs]</a><span class="k">class</span> <span class="nc">MaasClient</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot; Client Class</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">auth</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Entry point to client routines for interfacing</span>
+<span class="sd">        with MAAS api.</span>
+
+<span class="sd">        :param auth: MAAS Authorization class (required)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">auth</span> <span class="o">=</span> <span class="n">auth</span>
+
+    <span class="k">def</span> <span class="nf">_oauth</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Generates OAuth attributes for protected resources</span>
+
+<span class="sd">        :returns: OAuth class</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">oauth</span> <span class="o">=</span> <span class="n">OAuth1</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">auth</span><span class="o">.</span><span class="n">consumer_key</span><span class="p">,</span>
+                       <span class="n">client_secret</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">auth</span><span class="o">.</span><span class="n">consumer_secret</span><span class="p">,</span>
+                       <span class="n">resource_owner_key</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">auth</span><span class="o">.</span><span class="n">token_key</span><span class="p">,</span>
+                       <span class="n">resource_owner_secret</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">auth</span><span class="o">.</span><span class="n">token_secret</span><span class="p">,</span>
+                       <span class="n">signature_method</span><span class="o">=</span><span class="s">&#39;PLAINTEXT&#39;</span><span class="p">,</span>
+                       <span class="n">signature_type</span><span class="o">=</span><span class="s">&#39;query&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">oauth</span>
+
+<div class="viewcode-block" id="MaasClient.get"><a class="viewcode-back" href="../index.html#maasclient.MaasClient.get">[docs]</a>    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Performs a authenticated GET against a MAAS endpoint</span>
+
+<span class="sd">        :param url: MAAS endpoint</span>
+<span class="sd">        :param params: extra data sent with the HTTP request</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">auth</span><span class="o">.</span><span class="n">api_url</span> <span class="o">+</span> <span class="n">url</span><span class="p">,</span>
+                            <span class="n">auth</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_oauth</span><span class="p">(),</span>
+                            <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="MaasClient.post"><a class="viewcode-back" href="../index.html#maasclient.MaasClient.post">[docs]</a>    <span class="k">def</span> <span class="nf">post</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Performs a authenticated POST against a MAAS endpoint</span>
+
+<span class="sd">        :param url: MAAS endpoint</span>
+<span class="sd">        :param params: extra data sent with the HTTP request</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">url</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">auth</span><span class="o">.</span><span class="n">api_url</span> <span class="o">+</span> <span class="n">url</span><span class="p">,</span>
+                             <span class="n">auth</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_oauth</span><span class="p">(),</span>
+                             <span class="n">data</span><span class="o">=</span><span class="n">params</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="MaasClient.delete"><a class="viewcode-back" href="../index.html#maasclient.MaasClient.delete">[docs]</a>    <span class="k">def</span> <span class="nf">delete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Performs a authenticated DELETE against a MAAS endpoint</span>
+
+<span class="sd">        :param url: MAAS endpoint</span>
+<span class="sd">        :param params: extra data sent with the HTTP request</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">requests</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">url</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">auth</span><span class="o">.</span><span class="n">api_url</span> <span class="o">+</span> <span class="n">url</span><span class="p">,</span>
+                               <span class="n">auth</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_oauth</span><span class="p">())</span>
+
+    <span class="c">###########################################################################</span>
+    <span class="c"># Boot Images API</span>
+    <span class="c">###########################################################################</span></div>
+<div class="viewcode-block" id="MaasClient.boot_images"><a class="viewcode-back" href="../index.html#maasclient.MaasClient.boot_images">[docs]</a>    <span class="k">def</span> <span class="nf">boot_images</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">uuid</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Query boot images list</span>
+
+<span class="sd">        :param str uuid: uuid of cluster</span>
+<span class="sd">        :returns: list of boot images</span>
+<span class="sd">        :rtype: list</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">_url</span> <span class="o">=</span> <span class="s">&quot;/nodegroups/{uuid}/boot-images/&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">uuid</span><span class="o">=</span><span class="n">uuid</span><span class="p">)</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">_url</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">res</span><span class="o">.</span><span class="n">ok</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">res</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">[]</span>
+</div>
+<div class="viewcode-block" id="MaasClient.import_boot_images"><a class="viewcode-back" href="../index.html#maasclient.MaasClient.import_boot_images">[docs]</a>    <span class="k">def</span> <span class="nf">import_boot_images</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Import boot images on all accepted controllers</span>
+
+<span class="sd">        :returns: true on success, false on failure</span>
+<span class="sd">        :rtype: bool</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">_url</span> <span class="o">=</span> <span class="s">&quot;/nodegroups/&quot;</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">_url</span><span class="p">,</span> <span class="nb">dict</span><span class="p">(</span><span class="n">op</span><span class="o">=</span><span class="s">&#39;import_boot_images&#39;</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">res</span><span class="o">.</span><span class="n">ok</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">True</span>
+        <span class="k">return</span> <span class="bp">False</span>
+</div>
+<div class="viewcode-block" id="MaasClient.report_boot_images"><a class="viewcode-back" href="../index.html#maasclient.MaasClient.report_boot_images">[docs]</a>    <span class="k">def</span> <span class="nf">report_boot_images</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">uuid</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Describe imported images</span>
+
+<span class="sd">        :param str uuid: uuid of cluster</span>
+<span class="sd">        :returns: information on import images</span>
+<span class="sd">        :rtype: dict</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">_url</span> <span class="o">=</span> <span class="s">&quot;/nodegroups/{uuid}/boot-images&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">uuid</span><span class="o">=</span><span class="n">uuid</span><span class="p">)</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">_url</span><span class="p">,</span> <span class="nb">dict</span><span class="p">(</span><span class="n">op</span><span class="o">=</span><span class="s">&#39;report_boot_images&#39;</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">res</span><span class="o">.</span><span class="n">ok</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">res</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">{}</span>
+
+    <span class="c">###########################################################################</span>
+    <span class="c"># Node API</span>
+    <span class="c">###########################################################################</span></div>
+    <span class="nd">@property</span>
+<div class="viewcode-block" id="MaasClient.nodes"><a class="viewcode-back" href="../index.html#maasclient.MaasClient.nodes">[docs]</a>    <span class="k">def</span> <span class="nf">nodes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Nodes managed by MAAS</span>
+
+<span class="sd">        :returns: managed nodes</span>
+<span class="sd">        :rtype: list</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;/nodes/&#39;</span><span class="p">,</span> <span class="nb">dict</span><span class="p">(</span><span class="n">op</span><span class="o">=</span><span class="s">&#39;list&#39;</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">res</span><span class="o">.</span><span class="n">ok</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">res</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">[]</span>
+</div>
+<div class="viewcode-block" id="MaasClient.nodes_accept_all"><a class="viewcode-back" href="../index.html#maasclient.MaasClient.nodes_accept_all">[docs]</a>    <span class="k">def</span> <span class="nf">nodes_accept_all</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Accept all commissioned nodes</span>
+
+<span class="sd">        :returns: Status</span>
+<span class="sd">        :rtype: bool</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">res</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s">&#39;/nodes/&#39;</span><span class="p">,</span> <span class="nb">dict</span><span class="p">(</span><span class="n">op</span><span class="o">=</span><span class="s">&#39;accept_all&#39;</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">res</span><span class="o">.</span><span class="n">ok</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">True</span>
+        <span class="k">return</span> <span class="bp">False</span>
+</div>
+<div class="viewcode-block" id="MaasClient.node_commission"><a class="viewcode-back" href="../index.html#maasclient.MaasClient.node_commission">[docs]</a>    <span class="k">def</span> <span class="nf">node_commission</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">system_id</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; (Re)commission a node</span>
+
+<span class="sd">        :param system_id: machine identification</span>
+<span class="sd">        :returns: True on success False on failure</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s">&#39;/nodes/</span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">system_id</span><span class="p">,),</span> <span class="nb">dict</span><span class="p">(</span><span class="n">op</span><span class="o">=</span><span class="s">&#39;commission&#39;</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">res</span><span class="o">.</span><span class="n">ok</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">True</span>
+        <span class="k">return</span> <span class="bp">False</span>
+</div>
+<div class="viewcode-block" id="MaasClient.node_start"><a class="viewcode-back" href="../index.html#maasclient.MaasClient.node_start">[docs]</a>    <span class="k">def</span> <span class="nf">node_start</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">system_id</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Power up a node</span>
+
+<span class="sd">        :param system_id: machine identification</span>
+<span class="sd">        :returns: True on success False on failure</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s">&#39;/nodes/</span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">system_id</span><span class="p">,),</span> <span class="nb">dict</span><span class="p">(</span><span class="n">op</span><span class="o">=</span><span class="s">&#39;start&#39;</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">res</span><span class="o">.</span><span class="n">ok</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">True</span>
+        <span class="k">return</span> <span class="bp">False</span>
+</div>
+<div class="viewcode-block" id="MaasClient.node_stop"><a class="viewcode-back" href="../index.html#maasclient.MaasClient.node_stop">[docs]</a>    <span class="k">def</span> <span class="nf">node_stop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">system_id</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Shutdown a node</span>
+
+<span class="sd">        :param system_id: machine identification</span>
+<span class="sd">        :returns: True on success False on failure</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s">&#39;/nodes/</span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">system_id</span><span class="p">,),</span> <span class="nb">dict</span><span class="p">(</span><span class="n">op</span><span class="o">=</span><span class="s">&#39;stop&#39;</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">res</span><span class="o">.</span><span class="n">ok</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">True</span>
+        <span class="k">return</span> <span class="bp">False</span>
+</div>
+<div class="viewcode-block" id="MaasClient.node_remove"><a class="viewcode-back" href="../index.html#maasclient.MaasClient.node_remove">[docs]</a>    <span class="k">def</span> <span class="nf">node_remove</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">system_id</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Delete a node</span>
+
+<span class="sd">        :param system_id: machine identification</span>
+<span class="sd">        :returns: True and success False on failure</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="s">&#39;/nodes/</span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">system_id</span><span class="p">,))</span>
+        <span class="k">if</span> <span class="n">res</span><span class="o">.</span><span class="n">ok</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">True</span>
+        <span class="k">return</span> <span class="bp">False</span>
+
+    <span class="c">###########################################################################</span>
+    <span class="c"># Nodegroups API</span>
+    <span class="c">###########################################################################</span></div>
+    <span class="nd">@property</span>
+<div class="viewcode-block" id="MaasClient.nodegroups"><a class="viewcode-back" href="../index.html#maasclient.MaasClient.nodegroups">[docs]</a>    <span class="k">def</span> <span class="nf">nodegroups</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; List nodegroups</span>
+
+<span class="sd">        :returns: List of nodegroups</span>
+<span class="sd">        :rtype list:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;/nodegroups/&#39;</span><span class="p">,</span> <span class="nb">dict</span><span class="p">(</span><span class="n">op</span><span class="o">=</span><span class="s">&#39;list&#39;</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">res</span><span class="o">.</span><span class="n">ok</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">res</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">[]</span>
+</div>
+<div class="viewcode-block" id="MaasClient.nodegroups_download_progress"><a class="viewcode-back" href="../index.html#maasclient.MaasClient.nodegroups_download_progress">[docs]</a>    <span class="k">def</span> <span class="nf">nodegroups_download_progress</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">uuid</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Report download progress for a cluster controller</span>
+
+<span class="sd">        :param str uuid: uuid of controller</span>
+<span class="sd">        :returns: file information</span>
+<span class="sd">        :rtype: dict</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">_url</span> <span class="o">=</span> <span class="s">&quot;/nodegroups/{uuid}/&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">uuid</span><span class="o">=</span><span class="n">uuid</span><span class="p">)</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">_url</span><span class="p">,</span> <span class="nb">dict</span><span class="p">(</span><span class="n">op</span><span class="o">=</span><span class="s">&#39;report_download_progress&#39;</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">res</span><span class="o">.</span><span class="n">ok</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">res</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">{}</span>
+
+    <span class="c">###########################################################################</span>
+    <span class="c"># Tag API</span>
+    <span class="c">###########################################################################</span></div>
+    <span class="nd">@property</span>
+<div class="viewcode-block" id="MaasClient.tags"><a class="viewcode-back" href="../index.html#maasclient.MaasClient.tags">[docs]</a>    <span class="k">def</span> <span class="nf">tags</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; List tags known to MAAS</span>
+
+<span class="sd">        :returns: List of tags or empty list</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;/tags/&#39;</span><span class="p">,</span> <span class="nb">dict</span><span class="p">(</span><span class="n">op</span><span class="o">=</span><span class="s">&#39;list&#39;</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">res</span><span class="o">.</span><span class="n">ok</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">res</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">[]</span>
+</div>
+<div class="viewcode-block" id="MaasClient.tag_new"><a class="viewcode-back" href="../index.html#maasclient.MaasClient.tag_new">[docs]</a>    <span class="k">def</span> <span class="nf">tag_new</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tag</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Create tag if it doesn&#39;t exist.</span>
+
+<span class="sd">        :param tag: Tag name</span>
+<span class="sd">        :returns: Success/Fail boolean</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">tags</span> <span class="o">=</span> <span class="p">{</span><span class="n">tagmd</span><span class="p">[</span><span class="s">&#39;name&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">tagmd</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">tags</span><span class="p">}</span>
+        <span class="k">if</span> <span class="n">tag</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">tags</span><span class="p">:</span>
+            <span class="n">res</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s">&#39;/tags/&#39;</span><span class="p">,</span> <span class="nb">dict</span><span class="p">(</span><span class="n">op</span><span class="o">=</span><span class="s">&#39;new&#39;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">tag</span><span class="p">))</span>
+            <span class="k">return</span> <span class="n">res</span><span class="o">.</span><span class="n">ok</span>
+        <span class="k">return</span> <span class="bp">False</span>
+</div>
+<div class="viewcode-block" id="MaasClient.tag_delete"><a class="viewcode-back" href="../index.html#maasclient.MaasClient.tag_delete">[docs]</a>    <span class="k">def</span> <span class="nf">tag_delete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tag</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Delete a tag</span>
+
+<span class="sd">        :param tag: tag id</span>
+<span class="sd">        :type tag: str</span>
+<span class="sd">        :returns: True on success False on failure</span>
+<span class="sd">        :rtype: bool</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="s">&#39;/tags/</span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">tag</span><span class="p">,))</span>
+        <span class="k">if</span> <span class="n">res</span><span class="o">.</span><span class="n">ok</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">True</span>
+        <span class="k">return</span> <span class="bp">False</span>
+</div>
+<div class="viewcode-block" id="MaasClient.tag_machine"><a class="viewcode-back" href="../index.html#maasclient.MaasClient.tag_machine">[docs]</a>    <span class="k">def</span> <span class="nf">tag_machine</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tag</span><span class="p">,</span> <span class="n">system_id</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Tag the machine with the specified tag.</span>
+
+<span class="sd">        :param tag: Tag name</span>
+<span class="sd">        :type tag: str</span>
+<span class="sd">        :param system_id: ID of node</span>
+<span class="sd">        :type system_id: str</span>
+<span class="sd">        :returns: Success or Fail</span>
+<span class="sd">        :rtype: bool</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c"># Make use of rest api</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s">&#39;/tags/</span><span class="si">%s</span><span class="s">/&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">tag</span><span class="p">,),</span>
+                        <span class="nb">dict</span><span class="p">(</span><span class="n">op</span><span class="o">=</span><span class="s">&#39;update_nodes&#39;</span><span class="p">,</span>
+                             <span class="n">add</span><span class="o">=</span><span class="n">system_id</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">res</span><span class="o">.</span><span class="n">ok</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">True</span>
+        <span class="k">return</span> <span class="bp">False</span>
+</div>
+<div class="viewcode-block" id="MaasClient.tag_name"><a class="viewcode-back" href="../index.html#maasclient.MaasClient.tag_name">[docs]</a>    <span class="k">def</span> <span class="nf">tag_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">maas</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Tag each node as its hostname.</span>
+
+<span class="sd">        This is a bit ugly. Since we want to be able to juju deploy to</span>
+<span class="sd">        a particular node that the user has selected, we use juju&#39;s</span>
+<span class="sd">        constraints support for maas. Unfortunately, juju didn&#39;t</span>
+<span class="sd">        implement maas-name directly, we have to tag each node with</span>
+<span class="sd">        its hostname for now so that we can pass that tag as a</span>
+<span class="sd">        constraint to juju.</span>
+
+<span class="sd">        :param maas: MAAS object representing all managed nodes</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">machine</span> <span class="ow">in</span> <span class="n">maas</span><span class="o">.</span><span class="n">machines</span><span class="p">():</span>
+            <span class="n">tag</span> <span class="o">=</span> <span class="n">machine</span><span class="o">.</span><span class="n">system_id</span>
+            <span class="k">if</span> <span class="s">&#39;tag_names&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">machine</span><span class="o">.</span><span class="n">tag_names</span> <span class="ow">or</span> \
+               <span class="n">tag</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">machine</span><span class="o">.</span><span class="n">tag_names</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">tag_new</span><span class="p">(</span><span class="n">tag</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">tag_machine</span><span class="p">(</span><span class="n">tag</span><span class="p">,</span> <span class="n">tag</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="MaasClient.tag_fpi"><a class="viewcode-back" href="../index.html#maasclient.MaasClient.tag_fpi">[docs]</a>    <span class="k">def</span> <span class="nf">tag_fpi</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">maas</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Tag each DECLARED host with the FPI tag.</span>
+
+<span class="sd">        Also a little strange: we could define a tag with</span>
+<span class="sd">        &#39;definition=true()&#39; and automatically tag each node. However,</span>
+<span class="sd">        each time we un-tag a node, maas evaluates the xpath</span>
+<span class="sd">        expression again and re-tags it. So, we do it once, manually,</span>
+<span class="sd">        when the machine is in the DECLARED state (also to avoid</span>
+<span class="sd">        re-tagging things that have already been tagged).</span>
+
+<span class="sd">        :param maas: MAAS object representing all managed nodes</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">FPI_TAG</span> <span class="o">=</span> <span class="s">&#39;use-fastpath-installer&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tag_new</span><span class="p">(</span><span class="n">FPI_TAG</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">machine</span> <span class="ow">in</span> <span class="n">maas</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">machine</span><span class="p">[</span><span class="s">&#39;status&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">tag_machine</span><span class="p">(</span><span class="n">FPI_TAG</span><span class="p">,</span> <span class="n">machine</span><span class="p">[</span><span class="s">&#39;system_id&#39;</span><span class="p">])</span>
+
+    <span class="c">###########################################################################</span>
+    <span class="c"># Users API</span>
+    <span class="c">###########################################################################</span></div>
+    <span class="nd">@property</span>
+<div class="viewcode-block" id="MaasClient.users"><a class="viewcode-back" href="../index.html#maasclient.MaasClient.users">[docs]</a>    <span class="k">def</span> <span class="nf">users</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; List users on MAAS</span>
+
+<span class="sd">        :returns: List of registered users or an empty list</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;/users/&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">res</span><span class="o">.</span><span class="n">ok</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">res</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">[]</span>
+
+    <span class="c">###########################################################################</span>
+    <span class="c"># Zone API</span>
+    <span class="c">###########################################################################</span></div>
+    <span class="nd">@property</span>
+<div class="viewcode-block" id="MaasClient.zones"><a class="viewcode-back" href="../index.html#maasclient.MaasClient.zones">[docs]</a>    <span class="k">def</span> <span class="nf">zones</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; List physical zones</span>
+
+<span class="sd">        :returns: List of managed zones or empty list</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;/zones/&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">res</span><span class="o">.</span><span class="n">ok</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">res</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">[]</span>
+</div>
+<div class="viewcode-block" id="MaasClient.zone_new"><a class="viewcode-back" href="../index.html#maasclient.MaasClient.zone_new">[docs]</a>    <span class="k">def</span> <span class="nf">zone_new</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s">&quot;Zone created by API&quot;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Create a physical zone</span>
+
+<span class="sd">        :param name: Name of the zone</span>
+<span class="sd">        :param description: Description of zone.</span>
+<span class="sd">        :returns: True on success False on failure</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s">&#39;/zones/&#39;</span><span class="p">,</span> <span class="nb">dict</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span>
+                                        <span class="n">description</span><span class="o">=</span><span class="n">description</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">res</span><span class="o">.</span><span class="n">ok</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">True</span>
+        <span class="k">return</span> <span class="bp">False</span>
+</div>
+<div class="viewcode-block" id="MaasClient.zone_delete"><a class="viewcode-back" href="../index.html#maasclient.MaasClient.zone_delete">[docs]</a>    <span class="k">def</span> <span class="nf">zone_delete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Delete a zone.</span>
+
+<span class="sd">        :param name: Name of the zone to be deleted</span>
+<span class="sd">        :returns: True on success &amp; False on failure.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="s">&#39;/zones/{}/&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">res</span><span class="o">.</span><span class="n">ok</span></div></div>
+</pre></div>
+
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2014, Ubuntu Solutions Engineering.
+    </p>
+  </div>
+
+  <a href="https://github.com/snide/sphinx_rtd_theme">Sphinx theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'0.1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
