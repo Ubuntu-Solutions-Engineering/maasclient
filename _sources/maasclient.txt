@@ -1,8 +1,0 @@
-``maasclient`` --- API
-======================
-
-.. automodule:: maasclient
-    :noindex:
-    :members:
-    :undoc-members:
-    :show-inheritance:
