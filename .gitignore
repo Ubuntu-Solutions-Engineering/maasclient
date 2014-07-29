@@ -13,3 +13,4 @@ debian/maasclient/
 *.swp
 # the dependencies deb
 *.deb
+docs/_build
