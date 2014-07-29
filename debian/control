@@ -21,8 +21,7 @@ Vcs-Git: git://github.com/Ubuntu-Solutions-Engineering/maasclient.git
 
 Package: python3-maasclient
 Architecture: all
-Depends: maas,
-         python3-all,
+Depends: python3-all,
          python3-mock,
          python3-nose,
          python3-requests,
