@@ -47,16 +47,23 @@ update_version:
 
 
 .PHONY: ci-test pyflakes pep8 test
-ci-test: pyflakes pep8 test
+ci-test: pyflakes pep8 travis-test
 
 pyflakes:
-	python3 `which pyflakes` maasclient
+	python3 `which pyflakes` maasclient test
 
 pep8:
-	pep8 cloudinstall
+	pep8 maasclient test
 
-test:
-	nosetests -v --with-cover --cover-package=maasclient --cover-html test
+NOSE_ARGS = -v -s --with-cover --cover-package=maasclient --cover-html --cover-inclusive maasclient
 
+travis-test:
+	nosetests $(NOSE_ARGS) test/unit
+
+unit-test:
+	nosetests3 $(NOSE_ARGS) test/unit
+
+integration-test:
+	nosetests3 $(NOSE_ARGS) test/integration
 
 all: deb
