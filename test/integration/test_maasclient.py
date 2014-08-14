@@ -42,6 +42,7 @@ class MaasAuthTest(unittest.TestCase):
         self.assertEquals(3, len(AUTH.api_key.split(':')))
 
 
+@unittest.skipIf(not MAAS_INSTALLED, "Maas is not installed")
 class MaasClientTest(unittest.TestCase):
     def setUp(self):
         self.c = MaasClient(AUTH)
