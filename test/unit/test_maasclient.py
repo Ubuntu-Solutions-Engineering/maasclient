@@ -19,8 +19,6 @@
 
 import json
 import unittest
-import sys
-sys.path.insert(0, '../maasclient')
 
 from maasclient import MaasClient
 
