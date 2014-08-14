@@ -26,10 +26,10 @@ sys.path.insert(0, '../maasclient')
 from maasclient import MaasClient
 from maasclient.auth import MaasAuth
 
-from unittest.mock import MagicMock, patch
 
 AUTH = MaasAuth()
-AUTH.api_key = 'FUVLUr44JARNCNMFsP:rdpdeVscAqvZhnm4Te:EpDGJacNqy5Xzj22Xd58Xv5vz8MqEQNA'
+AUTH.api_key = ('FUVLUr44JARNCNMFsP:'
+                'rdpdeVscAqvZhnm4Te:EpDGJacNqy5Xzj22Xd58Xv5vz8MqEQNA')
 AUTH.api_url = 'http://10.0.3.55/MAAS/api/1.0'
 
 _check_maas = requests.get(AUTH.api_url)

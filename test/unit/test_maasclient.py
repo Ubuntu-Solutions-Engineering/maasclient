@@ -20,14 +20,11 @@
 import json
 import unittest
 import sys
-import uuid
-import requests
 sys.path.insert(0, '../maasclient')
 
 from maasclient import MaasClient
-from maasclient.auth import MaasAuth
 
-from unittest.mock import call, MagicMock, patch, PropertyMock, sentinel
+from unittest.mock import MagicMock, patch, PropertyMock, sentinel
 
 
 def setup_mock_response(mock_requests_mod, op='get', ok=True, response=None):
@@ -41,7 +38,7 @@ def setup_mock_response(mock_requests_mod, op='get', ok=True, response=None):
     elif op == 'post':
         mock_requests_mod.post.return_value = mock_response
     else:
-        raise NotImplementedException("not mocking {} yet".format(op))
+        raise Exception("not mocking {} yet".format(op))
 
 ONE_MACHINE_JSON_NOTAGS = """
 [   {

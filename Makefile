@@ -50,10 +50,10 @@ update_version:
 ci-test: pyflakes pep8 travis-test
 
 pyflakes:
-	python3 `which pyflakes` maasclient
+	python3 `which pyflakes` maasclient test
 
 pep8:
-	pep8 cloudinstall
+	pep8 maasclient test
 
 NOSE_ARGS = -v -s --with-cover --cover-package=maasclient --cover-html --cover-inclusive maasclient
 
