@@ -273,8 +273,8 @@ class MaasClient:
             return True
         return False
 
-    def tag_name(self, maas):
-        """ Tag each node as its hostname.
+    def tag_name(self, nodes):
+        """ Tag each managed node with its hostname.
 
         This is a bit ugly. Since we want to be able to juju deploy to
         a particular node that the user has selected, we use juju's
@@ -283,16 +283,15 @@ class MaasClient:
         its hostname for now so that we can pass that tag as a
         constraint to juju.
 
-        :param maas: MAAS object representing all managed nodes
         """
-        for machine in maas.machines():
-            tag = machine.system_id
-            if 'tag_names' not in machine.tag_names or \
-               tag not in machine.tag_names:
-                self.tag_new(tag)
-                self.tag_machine(tag, tag)
+        for machine in nodes:
+            system_id = machine['system_id']
+            if 'tag_names' not in machine['tag_names'] or \
+               system_id not in machine['tag_names']:
+                self.tag_new(system_id)
+                self.tag_machine(system_id, system_id)
 
-    def tag_fpi(self, maas):
+    def tag_fpi(self, nodes):
         """ Tag each DECLARED host with the FPI tag.
 
         Also a little strange: we could define a tag with
@@ -306,7 +305,7 @@ class MaasClient:
         """
         FPI_TAG = 'use-fastpath-installer'
         self.tag_new(FPI_TAG)
-        for machine in maas:
+        for machine in nodes:
             if machine['status'] == 0:
                 self.tag_machine(FPI_TAG, machine['system_id'])
 
