@@ -24,13 +24,15 @@ log = logging.getLogger(__name__)
 
 
 class MaasAuth:
+
     """ MAAS Authorization class
     """
-    def __init__(self):
+
+    def __init__(self, api_url=None, api_key=None):
         """ Initialize with optional OAuth credentials
         """
-        self.api_url = 'http://localhost/MAAS/api/1.0'
-        self.api_key = None
+        self.api_url = api_url if api_url else 'http://localhost/MAAS/api/1.0'
+        self.api_key = api_key
         self.consumer_secret = ''
 
     @property
