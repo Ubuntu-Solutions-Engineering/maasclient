@@ -16,13 +16,17 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import pprint
+import sys
 
 from maasclient.auth import MaasAuth
 from maasclient import MaasClient
 
 
 def main():
-    auth = MaasAuth()
+    url = None
+    if len(sys.argv) > 1:
+        url = sys.argv[1]
+    auth = MaasAuth(api_url=url)
     auth.get_api_key('root')
     maas_client = MaasClient(auth)
 
