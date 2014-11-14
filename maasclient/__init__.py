@@ -16,6 +16,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import bson
 from requests_oauthlib import OAuth1
 import requests
 import json
@@ -130,6 +131,22 @@ class MaasClient:
         if res.ok:
             return json.loads(res.text)
         return []
+
+    def node_details(self, system_id):
+        """ Node Details from e.g. lshw.
+        May be encoded as XML.
+
+        :returns: dictionary of commissioning details
+        :rtype: dict
+        """
+        res = self.get('/nodes/{}/'.format(system_id),
+                       dict(op='details'))
+        if res.ok:
+            ds = bson.decode_all(res.content)
+            if len(ds) == 0:
+                return None
+            return ds[0]
+        return None
 
     def nodes_accept_all(self):
         """ Accept all commissioned nodes
