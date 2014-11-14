@@ -12,7 +12,8 @@ Build-Depends: debhelper (>= 9),
                python3-nose,
                python3-requests,
                python3-requests-oauthlib,
-               python3-setuptools
+               python3-setuptools,
+               python3-bson
 Standards-Version: 3.9.5
 Homepage: https://github.com/Ubuntu-Solutions-Engineering/maasclient
 X-Python3-Version: >= 3.3
@@ -27,6 +28,7 @@ Depends: python3-all,
          python3-requests,
          python3-requests-oauthlib,
          python3-setuptools,
+         python3-bson,
          ${misc:Depends},
          ${python3:Depends}
 Description: MAASClient
