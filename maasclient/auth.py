@@ -73,12 +73,10 @@ class MaasAuth:
         :param username: (optional) MAAS user to query for credentials
         :type username: str
         """
-        maas_creds_file = os.path.expanduser('~/.cloud-install/maas-creds')
-        if os.path.isfile(maas_creds_file):
-            with open(maas_creds_file, 'r') as f:
-                self.api_key = f.read().rstrip('\n')
-        else:
-            log.debug("Could not find credentials, attempting to login.")
+        if os.path.isfile('/usr/sbin/maas-region-admin'):
             out = check_output(['sudo', 'maas-region-admin', 'apikey',
                                 '--username', username])
             self.api_key = out.decode('ascii').rstrip('\n')
+        else:
+            raise Exception(
+                'Unable to find maas-region-admin to query api key.')

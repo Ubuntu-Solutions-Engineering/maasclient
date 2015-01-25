@@ -23,6 +23,7 @@ import json
 
 
 class MaasClient:
+
     """ Client Class
     """
 
@@ -132,6 +133,72 @@ class MaasClient:
             return json.loads(res.text)
         return []
 
+    def nodes_V2(self, **params):
+        """ Nodes managed by MAAS
+
+        See http://maas.ubuntu.com/docs/api.html#nodes
+
+        :param params: keyword parameters to filter returned nodes
+                       allowed values include hostnames, mac_addresses,
+                       zone.
+        :returns: managed nodes
+        :rtype: list
+        """
+        params['op'] = 'list'
+        res = self.get('/nodes/', params)
+        if res.ok:
+            machines = map(Machine, res.json())
+            # Filter by state post response manually till maas fixes.
+            if 'state' in params:
+                machines = [m for m in machines if m.state == params['state']]
+            return machines
+        return []
+
+    def node_get(self, node_id):
+        res = self.get('/nodes/%s' % node_id)
+        if res.ok:
+            return Machine(res.json())
+        return None
+
+    def node_acquire(self, **params):
+        """
+        See http://maas.ubuntu.com/docs/api.html#nodes
+        """
+        params['op'] = 'acquire'
+        res = self.post('/nodes/', params)
+        if res.ok:
+            return Machine(res.json())
+        return []
+
+    def node_release(self, node_id):
+        """ Release a node back into the pool.
+        """
+        res = self.post('/nodes/%s/' % node_id, {'op': 'release'})
+        return res.ok
+
+    def node_start(self, node_id, user_data=None, distro_series=None):
+        """ Power up a node
+
+        :param node_id: machine identification
+        :returns: True on success False on failure
+        """
+        params = {'op': 'start'}
+        if user_data:
+            params['user_data'] = user_data
+        if distro_series:
+            params['distro_series'] = distro_series
+        res = self.post('/nodes/%s/' % node_id, params)
+        return res.ok
+
+    def node_stop(self, node_id):
+        """ Shutdown a node
+
+        :param node_id: machine identification
+        :returns: True on success False on failure
+        """
+        res = self.post('/nodes/%s/' % node_id, {'op': 'stop'})
+        return res.ok
+
     def node_details(self, system_id):
         """ Node Details from e.g. lshw.
         May be encoded as XML.
@@ -167,28 +234,6 @@ class MaasClient:
         :returns: True on success False on failure
         """
         res = self.post('/nodes/%s' % (system_id,), dict(op='commission'))
-        if res.ok:
-            return True
-        return False
-
-    def node_start(self, system_id):
-        """ Power up a node
-
-        :param system_id: machine identification
-        :returns: True on success False on failure
-        """
-        res = self.post('/nodes/%s' % (system_id,), dict(op='start'))
-        if res.ok:
-            return True
-        return False
-
-    def node_stop(self, system_id):
-        """ Shutdown a node
-
-        :param system_id: machine identification
-        :returns: True on success False on failure
-        """
-        res = self.post('/nodes/%s' % (system_id,), dict(op='stop'))
         if res.ok:
             return True
         return False
@@ -340,6 +385,19 @@ class MaasClient:
             return json.loads(res.text)
         return []
 
+    ##########################################################################
+    # Network API
+    ##########################################################################
+    @property
+    def networks(self):
+        """ List networks
+        :returns: List of networks
+        """
+        res = self.get('/networks/')
+        if res.ok:
+            return res.json()
+        return []
+
     ###########################################################################
     # Zone API
     ###########################################################################
@@ -375,3 +433,79 @@ class MaasClient:
         """
         res = self.delete('/zones/{}/'.format(name))
         return res.ok
+
+
+class vocab(dict):
+    __slots__ = ()
+
+    def __getattr__(self, k):
+        try:
+            return self[k]
+        except KeyError:
+            return AttributeError(k)
+
+    def label(self, value):
+        for k, v in self.items():
+            if v == value:
+                return k
+
+MAAS_STATES = vocab(
+    DECLARED=0,
+    COMMISSIONING=1,
+    FAILED_TESTS=2,
+    MISSING=3,
+    READY=4,
+    RESERVED=5,
+    ALLOCATED=6,
+    RETIRED=7)
+
+
+class Machine(dict):
+
+    __slots__ = ()
+
+    @property
+    def hostname(self):
+        return self['hostname']
+
+    @property
+    def arch(self):
+        return self['architecture']
+
+    @property
+    def status(self):
+        return self['status']
+
+    @property
+    def cpu_cores(self):
+        return self['cpu_count']
+
+    @property
+    def mem(self):
+        """ Size Memory in mb"""
+        return self['memory']
+
+    @property
+    def disk(self):
+        """ Size root disk in gb"""
+        return self['storage']
+
+    @property
+    def system_id(self):
+        return self['system_id']
+
+    @property
+    def tags(self):
+        return self.get('tags', [])
+
+    @property
+    def ip_addresses(self):
+        return self['ip_addresses']
+
+    @property
+    def mac_addresses(self):
+        return [m['mac_address'] for m in self.get('macaddress_set', [])]
+
+    @property
+    def status_label(self):
+        return MAAS_STATES.label(self.status)
