@@ -76,7 +76,7 @@ class MaasAuth:
         if os.path.isfile('/usr/sbin/maas-region-admin'):
             out = check_output(['sudo', 'maas-region-admin', 'apikey',
                                 '--username', username])
-            self.api_key = out.decode('ascii').rstrip('\n')
+            self.api_key = out.decode('ascii').split()[-1].rstrip('\n')
         else:
             raise Exception(
                 'Unable to find maas-region-admin to query api key.')
