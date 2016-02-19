@@ -30,14 +30,7 @@ from setuptools import setup, find_packages
 import os
 import sys
 
-VERSION = '0.3'
-
-REQUIREMENTS = [
-    "requests"
-]
-
-TEST_REQUIREMENTS = list(REQUIREMENTS)
-TEST_REQUIREMENTS.extend(["mock", "nose"])
+VERSION = '0.4'
 
 if sys.argv[-1] == 'clean':
     print("Cleaning up ...")
@@ -56,4 +49,5 @@ setup(name='maasclient',
       author_email='ubuntu-dev@lists.ubuntu.com',
       url='https://github.com/Ubuntu-Solutions-Engineering/maasclient',
       license="AGPLv3+",
-      packages=find_packages(exclude=["test"]))
+      packages=find_packages(exclude=["test"]),
+      install_requires=open('requirements.txt', 'r').readlines())

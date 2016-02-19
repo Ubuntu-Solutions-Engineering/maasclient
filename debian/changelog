@@ -1,3 +1,9 @@
+maasclient (0.4) xenial; urgency=medium
+
+  * Update python requirements
+
+ -- Adam Stokes <adam.stokes@ubuntu.com>  Tue, 09 Feb 2016 14:46:26 -0500
+
 maasclient (0.3-0ubuntu1) utopic; urgency=medium
 
   * allow override of api_url and api_key
