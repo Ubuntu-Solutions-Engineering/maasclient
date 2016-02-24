@@ -68,6 +68,16 @@ class MaasClient:
                              auth=self._oauth(),
                              data=params)
 
+    def put(self, url, params=None):
+        """ Performs a authenticated PUT against a MAAS endpoint
+
+        :param url: MAAS endpoint
+        :param params: extra data sent with the HTTP request
+        """
+        return requests.put(url=self.auth.api_url + url,
+                            auth=self._oauth(),
+                            data=params)
+
     def delete(self, url, params=None):
         """ Performs a authenticated DELETE against a MAAS endpoint
 
