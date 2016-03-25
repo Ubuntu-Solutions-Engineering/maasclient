@@ -33,6 +33,8 @@ def main():
         auth.get_api_key('root')
     maas_client = MaasClient(auth)
     pprint.pprint(maas_client.nodes)
+    pprint.pprint(maas_client.get_server_config('maas_name'))
+    pprint.pprint(maas_client.server_hostname)
 
 if __name__ == "__main__":
     main()
