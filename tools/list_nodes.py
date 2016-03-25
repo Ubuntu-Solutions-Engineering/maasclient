@@ -24,12 +24,14 @@ from maasclient import MaasClient
 
 def main():
     url = None
-    if len(sys.argv) > 1:
+    if len(sys.argv) == 3:
         url = sys.argv[1]
-    auth = MaasAuth(api_url=url)
-    auth.get_api_key('root')
+        key = sys.argv[2]
+        auth = MaasAuth(api_url=url, api_key=key)
+    else:
+        auth = MaasAuth(api_url=url)
+        auth.get_api_key('root')
     maas_client = MaasClient(auth)
-
     pprint.pprint(maas_client.nodes)
 
 if __name__ == "__main__":
