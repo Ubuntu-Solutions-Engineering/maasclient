@@ -1,3 +1,4 @@
 requests
 requests_oauthlib
-bson
+bson==0.4.1
+six
