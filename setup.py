@@ -30,7 +30,7 @@ from setuptools import setup, find_packages
 import os
 import sys
 
-VERSION = '0.4.1'
+VERSION = '0.4.2'
 
 if sys.argv[-1] == 'clean':
     print("Cleaning up ...")

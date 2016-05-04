@@ -7,14 +7,14 @@ Build-Depends: debhelper (>= 9),
                pep8,
                pyflakes,
                python3-all,
+               python3-bson,
                python3-coverage,
                python3-mock,
                python3-nose,
                python3-requests,
                python3-requests-oauthlib,
                python3-setuptools,
-               python3-six,
-               python3-bson
+               python3-six
 Standards-Version: 3.9.5
 Homepage: https://github.com/Ubuntu-Solutions-Engineering/maasclient
 X-Python3-Version: >= 3.3
@@ -24,13 +24,13 @@ Vcs-Git: git://github.com/Ubuntu-Solutions-Engineering/maasclient.git
 Package: python3-maasclient
 Architecture: all
 Depends: python3-all,
+         python3-bson,
          python3-mock,
          python3-nose,
          python3-requests,
          python3-requests-oauthlib,
          python3-setuptools,
          python3-six,
-         python3-bson,
          ${misc:Depends},
          ${python3:Depends}
 Description: MAASClient
